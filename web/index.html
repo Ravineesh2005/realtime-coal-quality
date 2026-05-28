@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coal Quality Prediction System</title>
+    <meta name="description" content="Real-time Coal Quality Prediction Dashboard using CNN-LSTM and physical sensors.">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+    <div class="dashboard-container">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>Coal<span class="highlight">Vision</span></h2>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active"><a href="#">Dashboard</a></li>
+                    <li><a href="#">Model Diagnostics</a></li>
+                    <li><a href="#">Sensor Status</a></li>
+                    <li><a href="#">Historical Data</a></li>
+                    <li><a href="#">Settings</a></li>
+                </ul>
+            </nav>
+            <div class="system-status">
+                <div class="status-indicator live"></div>
+                <span>System Live</span>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header>
+                <h1>Real-time Coal Quality Monitor</h1>
+                <div class="header-actions">
+                    <span id="current-time" class="time-display">--:--:--</span>
+                    <button class="btn-primary">Generate Report</button>
+                </div>
+            </header>
+
+            <!-- Alerts Banner -->
+            <div id="alert-banner" class="alert-banner hidden">
+                <div class="alert-icon">⚠️</div>
+                <div class="alert-text">
+                    <strong>Discrepancy Detected!</strong> Visual (CNN-LSTM) and Physical (ANN) predictions show significant deviation. Diverter gate engaged.
+                </div>
+            </div>
+
+            <div class="grid-layout">
+                <!-- Visual Prediction Card -->
+                <section class="card glass-panel" id="visual-prediction">
+                    <h3>Visual Model (CNN-LSTM)</h3>
+                    <div class="prediction-value high-grade">
+                        <span class="value" id="visual-grade">High Grade</span>
+                        <span class="confidence">Confidence: <span id="visual-conf">92%</span></span>
+                    </div>
+                    <div class="video-feed-placeholder" id="video-container">
+                        <video id="live-camera-feed" autoplay playsinline muted></video>
+                        <div class="overlay-text" id="camera-overlay-text">Live Conveyor Feed (Offline)</div>
+                        <button id="connect-camera-btn" class="btn-primary" style="position: absolute; z-index: 10; padding: 0.5rem 1rem; font-size: 0.9rem;">Connect Camera</button>
+                        <div class="scanning-line" id="scanning-line" style="display: none;"></div>
+                    </div>
+                </section>
+
+                <!-- Physical Prediction Card -->
+                <section class="card glass-panel" id="physical-prediction">
+                    <h3>Physical Model (ANN)</h3>
+                    <div class="prediction-value high-grade">
+                        <span class="value" id="physical-grade">High Grade</span>
+                        <span class="confidence">Confidence: <span id="physical-conf">89%</span></span>
+                    </div>
+                    <div class="sensor-readings">
+                        <div class="sensor-item">
+                            <span class="label">Moisture</span>
+                            <span class="reading" id="sensor-moisture">8.5%</span>
+                        </div>
+                        <div class="sensor-item">
+                            <span class="label">Ash Content</span>
+                            <span class="reading" id="sensor-ash">12.1%</span>
+                        </div>
+                        <div class="sensor-item">
+                            <span class="label">Volatile Matters</span>
+                            <span class="reading" id="sensor-volatile">25.3%</span>
+                        </div>
+                        <div class="sensor-item">
+                            <span class="label">GCV</span>
+                            <span class="reading" id="sensor-gcv">5800 kcal</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Analytics Chart -->
+                <section class="card glass-panel col-span-2">
+                    <h3>Quality Trend Analysis (Last 10 Cycles)</h3>
+                    <div class="chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

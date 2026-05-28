@@ -1,0 +1,51 @@
+# Real-time Coal Quality Prediction System Implementation Plan
+
+This document outlines the step-by-step implementation plan for the Real-time Coal Quality Prediction System, based on the provided project idea and reference research paper.
+
+## Phase 1: Project Setup & Environment Preparation
+- **Initialize Repository**: Set up the project structure (`src/`, `data/`, `models/`, `web/`).
+- **Environment Setup**: Create a Python virtual environment and install core dependencies (TensorFlow/PyTorch, OpenCV, Pandas, NumPy, scikit-learn).
+- **Version Control**: Initialize Git repository and establish branching strategies.
+
+## Phase 2: Data Acquisition & Preprocessing Pipeline
+### 2.1 Visual Data (Camera Stream)
+- **Camera Interface**: Implement camera stream capture using OpenCV.
+- **Image Quality Assessment (IQA)**: Develop an auto-encoder or digital defogging pipeline to detect and compensate for dust and lens occlusion in real-time.
+- **Dynamic FPS Adjustment**: Implement logic to adjust camera FPS dynamically based on conveyor belt tachometer readings to ensure consistent spatial resolution.
+- **Preprocessing**: Resize, normalize, and augment video frames.
+
+### 2.2 Sensor Data (Physical Properties)
+- **Sensor Integration**: Set up data ingestion for Moisture, Ash Content, Volatile Matters, Fixed Carbon, and GCV sensors.
+- **Industrial Protocols**: Integrate OPC-UA / Modbus TCP for reliable sensor data acquisition.
+- **Preprocessing**: Implement data cleaning (removal of transient spikes) and normalization (scaling to [0, 1] range).
+
+## Phase 3: AI Model Development & Training
+### 3.1 Visual Model (CNN-LSTM)
+- **Architecture Design**: 
+  - **CNN**: Design convolutional layers to extract spatial features (texture, color, impurities) from individual coal frames.
+  - **LSTM**: Feed CNN features into LSTM layers to learn temporal progression and dynamic properties over time.
+- **Training**: Train the combined model using labeled historical visual data and coal quality metrics.
+- **Optimization**: Optimize the model for edge inference (e.g., using NVIDIA TensorRT for INT8/FP16 quantization).
+
+### 3.2 Physical Model (ANN)
+- **Architecture Design**: Design a robust Artificial Neural Network to predict coal quality using the preprocessed physical sensor data.
+- **Training**: Train the ANN using historical sensor data and XRF laboratory results.
+
+## Phase 4: System Integration & Synchronization
+- **Parallel Execution**: Configure the system to run the CNN-LSTM (Visual) and ANN (Physical) models concurrently.
+- **Speed Synchronization**: Integrate the tachometer speed data as contextual input to both models for temporal alignment.
+- **Comparison Module**: Develop a module to compare visual and physical predictions at fixed intervals (determined by the slowest sensor's measurement cycle).
+- **Automated Triaging & Diverter Logic**: Implement control logic to trigger mechanical gate diverters via Modbus/OPC-UA if discrepancies or critical quality drops are detected.
+
+## Phase 5: Web Interface & Dashboard Development
+- **Backend API**: Develop a RESTful API (Flask, Django, or Node.js/Express) to serve real-time predictions, alerts, and system status.
+- **Frontend Dashboard**: Build a responsive web interface (React, Vue, or Angular) featuring:
+  - Real-time coal quality visualizations (charts, gauges).
+  - Alerts for discrepancies between visual and physical models.
+  - System health and sensor status monitoring.
+
+## Phase 6: Deployment, Testing & Optimization
+- **Edge Deployment**: Containerize the inference engine using Docker and deploy to an edge device (e.g., NVIDIA Jetson AGX Xavier).
+- **System Integration Testing**: Validate communication between sensors, cameras, the edge device, and the central web server.
+- **Field Testing**: Deploy on the actual conveyor belt; monitor real-time inference latency (target < 10ms), prediction accuracy, and automated diverter responsiveness.
+- **Iterative Refinement**: Fine-tune model weights and decision thresholds based on real-world operational feedback.

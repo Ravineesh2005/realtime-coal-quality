@@ -1,0 +1,6 @@
+data/
+venv/
+other/
+junk/
+__pycache__/
+*.pdf
